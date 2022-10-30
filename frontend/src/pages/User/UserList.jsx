@@ -2,15 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { apiGet, apiSearch, apiDelete } from "../../config/api";
-import { Danger } from "../../import/components/atoms";
-import { ProtectedUser } from "../../utils/protected/ProtectedUser";
+import ProtectedUser from "../../utils/protected/ProtectedUser";
+import Danger from "../../components/atoms/Danger";
 import swal from "sweetalert";
 
 // COMPONENT
 const UserList = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -25,7 +22,7 @@ const UserList = () => {
   // GET ALL
   const getData = async () => {
     try {
-      const { success, error } = await apiGet(token, "user");
+      const { success, error } = await apiGet("user");
       if (success) {
         setUsers(success.users);
         setAlert("");
@@ -42,12 +39,7 @@ const UserList = () => {
   // GET QUERY
   const searchData = async () => {
     try {
-      const { success, error } = await apiSearch(
-        token,
-        "user",
-        "input",
-        search
-      );
+      const { success, error } = await apiSearch("user", "input", search);
       if (success) {
         setUsers(success.result);
         setAlert("");
@@ -64,7 +56,7 @@ const UserList = () => {
   // DELETE
   const deleteData = async (id) => {
     try {
-      const { success, error } = await apiDelete(token, "user", id);
+      const { success, error } = await apiDelete("user", id);
       if (success) {
         console.log(success.deleted_user);
       } else {
@@ -103,7 +95,6 @@ const UserList = () => {
   // RENDER
   return (
     <ProtectedUser
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -118,7 +109,7 @@ const UserList = () => {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Cari username atau role..."
+                    placeholder="Cari email atau role..."
                   />
                 </div>
               </div>
@@ -132,7 +123,7 @@ const UserList = () => {
                       <thead>
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Username</th>
+                          <th scope="col">Email</th>
                           <th scope="col">Role</th>
                           <th scope="col">Actions</th>
                         </tr>
@@ -141,8 +132,20 @@ const UserList = () => {
                         {users.map((user, index) => (
                           <tr key={user._id}>
                             <th scope="row">{index + 1}</th>
-                            <td>{user.username}</td>
-                            <td>{user.role}</td>
+                            <td>
+                              <div className="fst-italic">{user.email}</div>
+                            </td>
+                            <td>
+                              <div
+                                className={
+                                  user.role === "ADMIN"
+                                    ? "badge bg-secondary p-2"
+                                    : "badge bg-secondary bg-opacity-25 text-dark p-2"
+                                }
+                              >
+                                {user.role}
+                              </div>
+                            </td>
                             <td>
                               <div className="d-grid gap-2 d-md-flex justify-content">
                                 <Link
@@ -150,23 +153,20 @@ const UserList = () => {
                                   type="button"
                                   className="btn btn-primary btn-sm"
                                 >
-                                  <i className="bi bi-people-fill me-1" />
-                                  Detail
+                                  <i className="bi bi-people-fill" />
                                 </Link>
                                 <Link
                                   to={`form/${user._id}`}
                                   type="button"
                                   className="btn btn-warning btn-sm"
                                 >
-                                  <i className="bi bi-pencil-square me-1" />
-                                  Edit
+                                  <i className="bi bi-pencil-square" />
                                 </Link>
                                 <button
                                   onClick={() => deleteAlert(user._id)}
                                   className="btn btn-danger btn-sm"
                                 >
-                                  <i className="bi bi-trash-fill me-1" />
-                                  Delete
+                                  <i className="bi bi-trash-fill " />
                                 </button>
                               </div>
                             </td>

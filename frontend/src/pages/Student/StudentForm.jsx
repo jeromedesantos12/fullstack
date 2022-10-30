@@ -3,14 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { apiGetById, apiAdd, apiUpdate } from "../../config/api";
 import { validStudent } from "../../utils/validation/validStudent";
-import { ProtectedStudent } from "../../utils/protected/ProtectedStudent";
+import ProtectedStudent from "../../utils/protected/ProtectedStudent";
 import swal from "sweetalert";
 
 // COMPONENT
 const StudentForm = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
   const [nim, setNIM] = useState("");
   const [nama, setNama] = useState("");
@@ -62,7 +59,7 @@ const StudentForm = () => {
   // GET BY ID
   const getIdData = async () => {
     try {
-      const { success, error } = await apiGetById(token, "student", id);
+      const { success, error } = await apiGetById("student", id);
       if (success) {
         setNIM(success.student.nim);
         setNama(success.student.nama);
@@ -96,7 +93,7 @@ const StudentForm = () => {
   const addData = async () => {
     const valid = validation();
     try {
-      const { success, error } = await apiAdd(token, "student", attr);
+      const { success, error } = await apiAdd("student", attr);
       if (success) {
         console.log(success.added_student);
         swal("OK!", "Data berhasil disimpan!", "success");
@@ -123,7 +120,7 @@ const StudentForm = () => {
   const updateData = async () => {
     const valid = validation();
     try {
-      const { success, error } = await apiUpdate(token, "student", attr, id);
+      const { success, error } = await apiUpdate("student", attr, id);
       if (success) {
         console.log(success.updated_student);
         swal("OK!", "Data berhasil diubah!", "success");
@@ -152,7 +149,6 @@ const StudentForm = () => {
   // RENDER
   return (
     <ProtectedStudent
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">

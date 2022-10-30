@@ -1,42 +1,32 @@
 // IMPORT
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { apiGetById, apiProfile } from "../../config/api";
 import { validProfile } from "../../utils/validation/validUser";
-import { ProtectedStudent } from "../../utils/protected/ProtectedStudent";
+import ProtectedStudent from "../../utils/protected/ProtectedStudent";
 import swal from "sweetalert";
 
 // COMPONENT
 const UserForm = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
-  const [username, setUsername] = useState("");
+  const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [role, setRole] = useState("");
 
   // TEXT MERAH
-  const [txtusername, setTxtUsername] = useState("");
+  const [txtnama, setTxtNama] = useState("");
   const [txtemail, setTxtEmail] = useState("");
   const [txtpassword, setTxtPassword] = useState("");
   const [txtpasswordConfirmation, setTxtPasswordConfirmation] = useState("");
-
-  // TEXT MERAH (VALIDASI DUPLIKAT BACKEND)
-  const [duplicateusername, setDuplicateUsername] = useState("");
   const [duplicateemail, setDuplicateEmail] = useState("");
 
   // PARAMETER ID DI URL
   const { id } = useParams();
 
-  // REDIRECT
-  const navigate = useNavigate();
-
   // API <- "VALUE"
   const attr = {
-    username,
+    nama,
     email,
     password,
     passwordConfirmation,
@@ -44,8 +34,6 @@ const UserForm = () => {
 
   // SET KOSONG
   const kosong = () => {
-    setUsername("");
-    setEmail("");
     setPassword("");
     setPasswordConfirmation("");
   };
@@ -59,26 +47,24 @@ const UserForm = () => {
   // GET BY ID
   const getIdData = async () => {
     try {
-      const { success, error } = await apiGetById(token, "user", id);
+      const { success, error } = await apiGetById("user", id);
       if (success) {
-        setUsername(success.user.username);
+        setNama(success.user.nama);
         setEmail(success.user.email);
-        setRole(success.user.role);
       } else {
         throw error;
       }
     } catch (error) {
       console.error(error);
       swal("ERROR!", "Data tidak ditemukan!", "error");
-      navigate("/");
     }
   };
 
   // VALIDASI FRONTEND
   const validation = () => {
-    const value = validProfile(username, email, password, passwordConfirmation);
+    const value = validProfile(nama, email, password, passwordConfirmation);
     if (Object.keys(value).length > 0) {
-      setTxtUsername(value.username);
+      setTxtNama(value.nama);
       setTxtEmail(value.email);
       setTxtPassword(value.password);
       setTxtPasswordConfirmation(value.passwordConfirmation);
@@ -90,36 +76,28 @@ const UserForm = () => {
   const profileData = async () => {
     const valid = validation();
     try {
-      const { success, error } = await apiProfile(token, "user", attr, id);
+      const { success, error } = await apiProfile(attr, id);
       if (success) {
         console.log(success.updated_user);
         swal("OK!", "Data berhasil diubah!", "success");
         kosong();
-        navigate("/user");
       } else {
         throw error;
       }
     } catch (error) {
       console.error(error);
-      if (
-        error.profileUsername ||
-        error.profileEmail ||
-        Object.keys(valid).length > 0
-      ) {
-        setDuplicateUsername(error.profileUsername);
+      if (error.profileEmail || Object.keys(valid).length > 0) {
         setDuplicateEmail(error.profileEmail);
         return false;
       }
       swal("ERROR!", "Data gagal diubah!", "error");
       kosong();
-      navigate("/user");
     }
   };
 
   // RENDER
   return (
     <ProtectedStudent
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -133,34 +111,24 @@ const UserForm = () => {
                 <div className="row mb-3">
                   <div className="col">
                     <div className="mb-3">
-                      <label className="form-label" htmlFor="username">
-                        Username
+                      <label className="form-label" htmlFor="nama">
+                        Nama
                       </label>
                       <input
                         type="text"
-                        placeholder="Masukkan Username"
+                        placeholder="Masukkan Nama"
                         className={
-                          txtusername || duplicateusername
-                            ? "form-control is-invalid"
-                            : "form-control"
+                          txtnama ? "form-control is-invalid" : "form-control"
                         }
-                        id="username"
-                        value={username}
+                        id="nama"
+                        value={nama}
                         onChange={(e) => {
-                          setUsername(e.target.value);
-                          setTxtUsername("");
-                          setDuplicateUsername("");
+                          setNama(e.target.value);
+                          setTxtNama("");
                         }}
                       />
-                      {txtusername && (
-                        <div className="form-text text-danger">
-                          {txtusername}
-                        </div>
-                      )}
-                      {duplicateusername && (
-                        <div className="form-text text-danger">
-                          {duplicateusername}
-                        </div>
+                      {txtnama && (
+                        <div className="form-text text-danger">{txtnama}</div>
                       )}
                     </div>
                     <div className="mb-3">
@@ -251,9 +219,6 @@ const UserForm = () => {
                   <button type="submit" className="btn btn-success">
                     Ubah
                   </button>
-                  <Link to={"/"} type="button" className="btn btn-secondary">
-                    Kembali
-                  </Link>
                 </div>
               </form>
             </div>

@@ -3,24 +3,22 @@ const validator = require("validator");
 const User = require("../../models/UserModel");
 
 // ARRAY
-const arrRole = ["admin", "user"];
+const arrRole = ["ADMIN", "USER"];
 
 // CEK ROLE
 const cekRole = (value, role) => {
   if (!role) {
     value.role = "Role tidak boleh kosong!";
   } else if (!arrRole.includes(role)) {
-    value.role = "Role hanya admin dan user!";
+    value.role = "Role hanya ADMIN dan USER!";
   }
   return value;
 };
 
 // CEK VALIDASI USER
-const validUser = (value, username, email, password, passwordConfirmation) => {
-  if (!username) {
-    value.username = "Username tidak boleh kosong!";
-  } else if (!validator.isAlphanumeric(username)) {
-    value.username = "Username harus berupa huruf dan angka!";
+const validUser = (value, nama, email, password, passwordConfirmation) => {
+  if (!nama) {
+    value.nama = "Nama tidak boleh kosong!";
   }
   if (!email) {
     value.email = "Email tidak boleh kosong!";
@@ -45,8 +43,7 @@ const validUser = (value, username, email, password, passwordConfirmation) => {
 const duplicate = async (req, res) => {
   const value = {};
   try {
-    const { username, email } = req.body;
-    value.duplicateUsername = await User.findOne({ username });
+    const { email } = req.body;
     value.duplicateEmail = await User.findOne({ email });
   } catch (error) {
     value.error = error.message;
@@ -56,15 +53,11 @@ const duplicate = async (req, res) => {
 
 // VALIDASI ADD USER
 exports.validAdd = async (req, res, next) => {
-  const { username, email, password, passwordConfirmation, role } = req.body;
+  const { nama, email, password, passwordConfirmation, role } = req.body;
   const value = {};
-  const { duplicateUsername, duplicateEmail, error } = await duplicate(
-    req,
-    res
-  );
-  validUser(value, username, email, password, passwordConfirmation);
+  const { duplicateEmail, error } = await duplicate(req, res);
+  validUser(value, nama, email, password, passwordConfirmation);
   cekRole(value, role);
-  if (duplicateUsername) value.addUsername = "Username sudah digunakan!";
   if (duplicateEmail) value.addEmail = "Email sudah digunakan!";
   if (Object.keys(value).length > 0)
     return res.status(400).json({
@@ -94,16 +87,11 @@ exports.validUpdate = (req, res, next) => {
 
 // VALIDASI PROFILE USER
 exports.validProfile = async (req, res, next) => {
-  const { username, email, password, passwordConfirmation } = req.body;
+  const { nama, email, password, passwordConfirmation } = req.body;
   const { id } = req.params;
   const value = {};
-  const { duplicateUsername, duplicateEmail, error } = await duplicate(
-    req,
-    res
-  );
-  validUser(value, username, email, password, passwordConfirmation);
-  if (duplicateUsername && id !== duplicateUsername._id.toString())
-    value.profileUsername = "Username sudah digunakan oleh data lain!";
+  const { duplicateEmail, error } = await duplicate(req, res);
+  validUser(value, nama, email, password, passwordConfirmation);
   if (duplicateEmail && id !== duplicateEmail._id.toString())
     value.profileEmail = "Email sudah digunakan oleh data lain!";
   if (Object.keys(value).length > 0)
@@ -134,15 +122,13 @@ exports.validSearch = (req, res, next) => {
 
 // VALIDASI LOGIN
 exports.validLogin = (req, res, next) => {
-  const { user, password } = req.body;
+  const { email, password } = req.body;
   const value = {};
-  if (!user) {
-    value.user = "Username atau email tidak boleh kosong!";
+  if (!email) {
+    value.email = "Email tidak boleh kosong!";
   }
   if (!password) {
     value.password = "Password tidak boleh kosong!";
-  } else if (!validator.isLength(password, { min: 8 })) {
-    value.password = "Password minimal 8 karakter!";
   }
   if (Object.keys(value).length > 0)
     return res.status(400).json({

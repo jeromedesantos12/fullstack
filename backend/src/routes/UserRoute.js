@@ -1,6 +1,5 @@
 // IMPORT
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const { useError } = require("../controllers/ErrorController");
 const {
   getUsers,
@@ -9,7 +8,9 @@ const {
   addUser,
   updateUser,
   deleteUser,
+  registerUser,
   loginUser,
+  logoutUser,
   profileUser,
   verifyUser,
 } = require("../controllers/UserController");
@@ -23,7 +24,7 @@ const {
 const { validRole } = require("../utils/validation/validRole");
 const { verifyAccessToken } = require("../utils/auth/jwt");
 
-// METHOD API
+// API
 router.get("/read", verifyAccessToken, validRole, getUsers);
 router.get("/read/:id", verifyAccessToken, getUserById);
 router.get("/search", verifyAccessToken, validRole, validSearch, searchUser);
@@ -35,10 +36,12 @@ router.patch(
   validUpdate,
   updateUser
 );
-router.patch("/profile/:id", verifyAccessToken, validProfile, profileUser);
 router.delete("/delete/:id", verifyAccessToken, validRole, deleteUser);
-router.get("/verify", verifyAccessToken, verifyUser);
+router.post("/register", validProfile, registerUser);
 router.post("/login", validLogin, loginUser);
+router.delete("/logout", logoutUser);
+router.patch("/profile/:id", verifyAccessToken, validProfile, profileUser);
+router.get("/verify", verifyAccessToken, verifyUser);
 router.use("/", useError);
 
 // EXPORT

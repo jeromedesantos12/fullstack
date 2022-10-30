@@ -3,30 +3,24 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { apiGetById, apiAdd, apiUpdate } from "../../config/api";
 import { validAdd, validUpdate } from "../../utils/validation/validUser";
-import { ProtectedUser } from "../../utils/protected/ProtectedUser";
+import ProtectedUser from "../../utils/protected/ProtectedUser";
 import swal from "sweetalert";
 
 // COMPONENT
 const UserForm = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
-  const [username, setUsername] = useState("");
+  const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [role, setRole] = useState("");
 
   // TEXT MERAH
-  const [txtusername, setTxtUsername] = useState("");
+  const [txtnama, setTxtNama] = useState("");
   const [txtemail, setTxtEmail] = useState("");
   const [txtpassword, setTxtPassword] = useState("");
   const [txtpasswordConfirmation, setTxtPasswordConfirmation] = useState("");
   const [txtrole, setTxtRole] = useState("");
-
-  // TEXT MERAH (VALIDASI DUPLIKAT BACKEND)
-  const [duplicateusername, setDuplicateUsername] = useState("");
   const [duplicateemail, setDuplicateEmail] = useState("");
 
   // PARAMETER ID DI URL
@@ -37,7 +31,7 @@ const UserForm = () => {
 
   // API <- "VALUE"
   const attrAdd = {
-    username,
+    nama,
     email,
     password,
     passwordConfirmation,
@@ -45,7 +39,7 @@ const UserForm = () => {
   };
 
   const attrUpdate = {
-    username,
+    nama,
     email,
     password,
     passwordConfirmation,
@@ -54,7 +48,7 @@ const UserForm = () => {
 
   // SET KOSONG
   const kosong = () => {
-    setUsername("");
+    setNama("");
     setEmail("");
     setPassword("");
     setPasswordConfirmation("");
@@ -70,7 +64,7 @@ const UserForm = () => {
   // GET BY ID
   const getIdData = async () => {
     try {
-      const { success, error } = await apiGetById(token, "user", id);
+      const { success, error } = await apiGetById("user", id);
       if (success) {
         setRole(success.user.role);
       } else {
@@ -79,21 +73,15 @@ const UserForm = () => {
     } catch (error) {
       console.error(error);
       swal("ERROR!", "Data tidak ditemukan!", "error");
-      navigate("/");
+      navigate("/user");
     }
   };
 
   // VALIDASI ADD
   const validationAdd = () => {
-    const value = validAdd(
-      username,
-      email,
-      password,
-      passwordConfirmation,
-      role
-    );
+    const value = validAdd(nama, email, password, passwordConfirmation, role);
     if (Object.keys(value).length > 0) {
-      setTxtUsername(value.username);
+      setTxtNama(value.nama);
       setTxtEmail(value.email);
       setTxtPassword(value.password);
       setTxtPasswordConfirmation(value.passwordConfirmation);
@@ -115,7 +103,7 @@ const UserForm = () => {
   const addData = async () => {
     const valid = validationAdd();
     try {
-      const { success, error } = await apiAdd(token, "user", attrAdd);
+      const { success, error } = await apiAdd("user", attrAdd);
       if (success) {
         console.log(success.added_user);
         swal("OK!", "Data berhasil disimpan!", "success");
@@ -126,12 +114,7 @@ const UserForm = () => {
       }
     } catch (error) {
       console.error(error);
-      if (
-        error.addUsername ||
-        error.addEmail ||
-        Object.keys(valid).length > 0
-      ) {
-        setDuplicateUsername(error.addUsername);
+      if (error.addEmail || Object.keys(valid).length > 0) {
         setDuplicateEmail(error.addEmail);
         return false;
       }
@@ -145,7 +128,7 @@ const UserForm = () => {
   const updateData = async () => {
     const valid = validationUpdate();
     try {
-      const { success, error } = await apiUpdate(token, "user", attrUpdate, id);
+      const { success, error } = await apiUpdate("user", attrUpdate, id);
       if (success) {
         console.log(success.updated_user);
         swal("OK!", "Data berhasil diubah!", "success");
@@ -168,7 +151,6 @@ const UserForm = () => {
   // RENDER
   return (
     <ProtectedUser
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -183,34 +165,24 @@ const UserForm = () => {
                   <div className="col">
                     <div className={id ? "d-none" : "d-block"}>
                       <div className="mb-3">
-                        <label className="form-label" htmlFor="username">
-                          Username
+                        <label className="form-label" htmlFor="nama">
+                          Nama
                         </label>
                         <input
                           type="text"
-                          placeholder="Masukkan Username"
+                          placeholder="Masukkan Nama"
                           className={
-                            txtusername || duplicateusername
-                              ? "form-control is-invalid"
-                              : "form-control"
+                            txtnama ? "form-control is-invalid" : "form-control"
                           }
-                          id="username"
-                          value={username}
+                          id="nama"
+                          value={nama}
                           onChange={(e) => {
-                            setUsername(e.target.value);
-                            setTxtUsername("");
-                            setDuplicateUsername("");
+                            setNama(e.target.value);
+                            setTxtNama("");
                           }}
                         />
-                        {txtusername && (
-                          <div className="form-text text-danger">
-                            {txtusername}
-                          </div>
-                        )}
-                        {duplicateusername && (
-                          <div className="form-text text-danger">
-                            {duplicateusername}
-                          </div>
+                        {txtnama && (
+                          <div className="form-text text-danger">{txtnama}</div>
                         )}
                       </div>
                       <div className="mb-3">
@@ -318,8 +290,8 @@ const UserForm = () => {
                           <option value="" disabled>
                             Pilih Role
                           </option>
-                          <option value="admin">admin</option>
-                          <option value="user">user</option>
+                          <option value="ADMIN">ADMIN</option>
+                          <option value="USER">USER</option>
                         </select>
                       </div>
                       {txtrole && (

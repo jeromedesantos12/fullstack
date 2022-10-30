@@ -4,29 +4,34 @@ import { apiVerify } from "../../config/api";
 import React, { useState, useEffect } from "react";
 
 // PROTECT HALAMAN AUTH
-export const ProtectedAuth = ({ token, content }) => {
+const ProtectedAuth = ({ content }) => {
   // USE STATE
-  const [valid, setValid] = useState("");
+  const [verify, setVerify] = useState("");
 
   // USE EFFECT
   useEffect(() => {
-    tokenValid();
+    verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // CEK ROLE
-  const tokenValid = async () => {
+  // CEK TOKEN
+  const verifyToken = async () => {
     try {
-      const { success, error } = await apiVerify(token);
-      if (success) setValid({ success: success.message });
-      if (error) throw error;
+      const { success, error } = await apiVerify();
+      if (success) {
+        console.log(success.message);
+        setVerify({ success: true });
+      } else {
+        throw error;
+      }
     } catch (error) {
-      setValid({ error: error });
+      console.error(error);
+      setVerify({ error: true });
     }
   };
 
   // PROTECT HALAMAN
-  const { success, error } = valid;
+  const { success, error } = verify;
   if (success) {
     return (
       <Navigate to="/" className="bg-secondary bg-opacity-25 d-none">
@@ -37,3 +42,6 @@ export const ProtectedAuth = ({ token, content }) => {
     return <div className="bg-secondary bg-opacity-25 d-block">{content}</div>;
   }
 };
+
+// EXPORT
+export default ProtectedAuth;

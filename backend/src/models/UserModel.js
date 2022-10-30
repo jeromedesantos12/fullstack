@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 // SCHEMA DB
 const User = mongoose.Schema({
-  username: {
+  nama: {
     type: String,
     required: true,
   },

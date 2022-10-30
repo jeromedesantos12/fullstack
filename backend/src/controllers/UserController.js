@@ -1,6 +1,6 @@
 // IMPORT
 const User = require("../models/UserModel");
-const { hashPassword, comparePassword } = require("../utils/auth/bcript");
+const { hashPassword, comparePassword } = require("../utils/auth/bcrypt");
 const { generateAccessToken } = require("../utils/auth/jwt");
 
 // METHOD DB
@@ -8,7 +8,7 @@ exports.getUsers = async (req, res) => {
   try {
     const users = await User.find(
       {},
-      { _id: "$_id", username: "$username", email: "$email", role: "$role" }
+      { _id: "$_id", nama: "$nama", email: "$email", role: "$role" }
     );
     if (users.length == 0) {
       return res.status(204).json({
@@ -35,7 +35,7 @@ exports.getUserById = async (req, res) => {
   try {
     const user = await User.findOne(
       { _id: id },
-      { _id: "$_id", username: "$username", email: "$email", role: "$role" }
+      { _id: "$_id", nama: "$nama", email: "$email", role: "$role" }
     );
     if (!user) {
       return res.status(404).json({
@@ -62,13 +62,13 @@ exports.searchUser = async (req, res) => {
     const result = await User.find(
       {
         $or: [
-          { username: { $regex: `${input}`, $options: "i" } },
+          { email: { $regex: `${input}`, $options: "i" } },
           { role: { $regex: `${input}`, $options: "i" } },
         ],
       },
       {
         _id: "$_id",
-        username: "$username",
+        nama: "$nama",
         email: "$email",
         role: "$role",
       }
@@ -93,10 +93,10 @@ exports.searchUser = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
-  const { username, email, role } = req.body;
+  const { nama, email, password, role } = req.body;
   try {
-    const hashedPassword = await hashPassword(req, res);
-    const user = new User({ username, email, password: hashedPassword, role });
+    const hashedPassword = await hashPassword(password);
+    const user = new User({ nama, email, password: hashedPassword, role });
     const added_user = await user.save();
     res.status(201).json({
       status: "201 Created",
@@ -148,12 +148,12 @@ exports.deleteUser = async (req, res) => {
 
 exports.profileUser = async (req, res) => {
   const { id } = req.params;
-  const { username, email } = req.body;
+  const { nama, email, password } = req.body;
   try {
-    const hashedPassword = await hashPassword(req, res);
+    const hashedPassword = await hashPassword(password);
     const profiled_user = await User.updateOne(
       { _id: id },
-      { $set: { username, email, password: hashedPassword } }
+      { $set: { nama, email, password: hashedPassword } }
     );
     res.status(200).json({
       status: "200 OK",
@@ -168,19 +168,41 @@ exports.profileUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
-  const { user } = req.body;
+exports.registerUser = async (req, res) => {
+  const { nama, email, password } = req.body;
   try {
-    const userLog = await User.findOne({
-      $or: [{ username: user }, { email: user }],
+    const hashedPassword = await hashPassword(password);
+    const user = new User({
+      nama,
+      email,
+      password: hashedPassword,
+      role: "USER",
     });
+    const registered_user = await user.save();
+    res.status(201).json({
+      status: "201 Created",
+      message: "Data ditambahkan!",
+      registered_user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "500 Internal Server Error",
+      message: error.message || "Terjadi error saat menambahkan data!",
+    });
+  }
+};
+
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const userLog = await User.findOne({ email: email });
     if (!userLog) {
       return res.status(404).json({
         status: "404 Not Found",
-        message: { authUser: "User tidak ditemukan!" },
+        message: { authEmail: "Email tidak ditemukan!" },
       });
     }
-    const hashedPassword = await comparePassword(req, res, userLog);
+    const hashedPassword = await comparePassword(password, userLog);
     if (!hashedPassword) {
       return res.status(400).json({
         status: "400 Bad Request",
@@ -188,11 +210,17 @@ exports.loginUser = async (req, res) => {
       });
     }
     const token = generateAccessToken(userLog._id, userLog.role);
-    res.status(200).json({
-      status: "200 OK",
-      message: "Login Berhasil!",
-      token: token,
-    });
+    req.session = null;
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: 60 * 1000,
+      })
+      .status(200)
+      .json({
+        status: "200 OK",
+        message: "Login Berhasil!",
+      });
   } catch (error) {
     res.status(500).json({
       status: "500 Internal Server Error",
@@ -201,16 +229,21 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.verifyUser = async (req, res) => {
-  try {
-    res.status(200).json({
-      status: "200 OK",
-      message: "Konten dibuka!",
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "500 Internal Server Error",
-      message: error.message || "Terjadi error saat cek jwt!",
-    });
-  }
+exports.logoutUser = (req, res) => {
+  req.session = null;
+  res.clearCookie("token").status(200).json({
+    status: "200 OK",
+    message: "Anda telah logout!",
+  });
+};
+
+exports.verifyUser = (req, res) => {
+  res.status(200).json({
+    status: "200 OK",
+    message: "Konten dibuka!",
+    info: {
+      id: req.user.id,
+      role: req.user.role,
+    },
+  });
 };

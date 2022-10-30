@@ -2,15 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { apiGet, apiSearch, apiDelete } from "../../config/api";
-import { Danger } from "../../import/components/atoms";
-import { ProtectedStudent } from "../../utils/protected/ProtectedStudent";
+import ProtectedStudent from "../../utils/protected/ProtectedStudent";
+import Danger from "../../components/atoms/Danger";
 import swal from "sweetalert";
 
 // COMPONENT
 const StudentList = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState("");
@@ -25,7 +22,7 @@ const StudentList = () => {
   // GET ALL
   const getData = async () => {
     try {
-      const { success, error } = await apiGet(token, "student", token);
+      const { success, error } = await apiGet("student");
       if (success) {
         setStudents(success.students);
         setAlert("");
@@ -42,12 +39,7 @@ const StudentList = () => {
   // GET QUERY
   const searchData = async () => {
     try {
-      const { success, error } = await apiSearch(
-        token,
-        "student",
-        "input",
-        search
-      );
+      const { success, error } = await apiSearch("student", "input", search);
       if (success) {
         setStudents(success.result);
         setAlert("");
@@ -64,7 +56,7 @@ const StudentList = () => {
   // DELETE
   const deleteData = async (id) => {
     try {
-      const { success, error } = await apiDelete(token, "student", id);
+      const { success, error } = await apiDelete("student", id);
       if (success) {
         console.log(success.deleted_student);
       } else {
@@ -103,7 +95,6 @@ const StudentList = () => {
   // RENDER
   return (
     <ProtectedStudent
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -152,23 +143,20 @@ const StudentList = () => {
                                   type="button"
                                   className="btn btn-primary btn-sm"
                                 >
-                                  <i className="bi bi-people-fill me-1" />
-                                  Detail
+                                  <i className="bi bi-people-fill" />
                                 </Link>
                                 <Link
                                   to={`form/${student._id}`}
                                   type="button"
                                   className="btn btn-warning btn-sm"
                                 >
-                                  <i className="bi bi-pencil-square me-1" />
-                                  Edit
+                                  <i className="bi bi-pencil-square" />
                                 </Link>
                                 <button
                                   onClick={() => deleteAlert(student._id)}
                                   className="btn btn-danger btn-sm"
                                 >
-                                  <i className="bi bi-trash-fill me-1" />
-                                  Delete
+                                  <i className="bi bi-trash-fill" />
                                 </button>
                               </div>
                             </td>

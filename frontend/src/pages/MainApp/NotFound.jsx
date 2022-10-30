@@ -1,16 +1,13 @@
+// IMPORT
 import React from "react";
 import { Link } from "react-router-dom";
-import { Gap } from "../../import/components/atoms";
-import { ProtectedStudent } from "../../utils/protected/ProtectedStudent";
+import ProtectedStudent from "../../utils/protected/ProtectedStudent";
+import Gap from "../../components/atoms/Gap";
 
 const NotFound = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // RENDER
   return (
     <ProtectedStudent
-      token={token}
       content={
         <div className="container">
           <Gap height={40} />

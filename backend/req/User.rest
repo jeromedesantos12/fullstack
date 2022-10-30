@@ -1,56 +1,60 @@
-GET http://localhost:8080/user/read/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MjUyNCwiZXhwIjoxNjY0NzcyODI0fQ.yltn1ZPcuY_D-tffLWvcZEgJRl4ze1aMUfIYPcrCsbg
+GET http://127.0.0.1:4000/user/read
 
 ###
-GET http://localhost:8080/user/read/63296e5dcaf0f78b84de8d88
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NTk0NywiZXhwIjoxNjY0Njc2MjQ3fQ.t4UqXPMuUsBpxagUIbNPIPP598fWawZEkct7cfgffd4
+GET http://localhost:4000/auth/google/callback
+
 ###
-GET http://localhost:8080/user/search?input=s
-Authorization: Bearer eyJ---CIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NTk0NywiZXhwIjoxNjY0Njc2MjQ3fQ.t4UqXPMuUsBpxagUIbNPIPP598fWawZEkct7hku9iH4
+GET http://localhost:4000/user/read/63296e5dcaf0f78b84de8d88
+
 ###
-POST http://localhost:8080/user/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzA4MiwiZXhwIjoxNjY0NzczMzgyfQ.kJoRdCBrkVE7TptbpyJjT5hPiryLXaE1wQNa7etEDi4
+GET http://localhost:4000/user/search?input=s
+
+###
+POST http://localhost:4000/user/add
 Content-Type: application/json
 
 {
-    "username": "jeremy",
-    "email": "jeremy",
-    "password": "jeremy",
-    "passwordConfirmation": "jeremy",
-    "role": ""
+    "nama": "User",
+    "email": "user@gmail.com",
+    "password": "12345678",
+    "passwordConfirmation": "12345678",
+    "role": "USER"
 }
 ###
-PATCH http://localhost:8080/user/update/63296e5dcaf0f78b84de8d88
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzA4MiwiZXhwIjoxNjY0NzczMzgyfQ.kJoRdCBrkVE7TptbpyJjT5hPiryLXaE1wQNa7etEDi4
+PATCH http://localhost:4000/user/update/63296e5dcaf0f78b84de8d88
 Content-Type: application/json
 
 {
-    "role": "admin"
+    "role": "ADMIN"
 }
 ###
-PATCH http://localhost:8080/user/profile/63296e5dcaf0f78b84de8d88
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzE3MSwiZXhwIjoxNjY0NzczNDcxfQ.hhTSdgVJJwxzwHlX045o3J8AN2B8mwqbptU8BT9magU
+PATCH http://localhost:4000/user/profile/633e9f258dce552c0c031da3
 Content-Type: application/json
 
 {
-    "username": "jeremy",
+    "username": "santosojeremy07",
     "email": "jeremy@gmail.com",
-    "password": "jeremysantoso",
-    "passwordConfirmation": "jeremysantoso",
-    "role": "admin"
+    "password": "santosojeremy07",
+    "passwordConfirmation": "santosojeremy07",
+    "role": "ADMIN"
 }
 ###
-DELETE http://localhost:8080/user/delete/633149545e7497329a0a5a
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzdiNzU4Yzk0OWEzZWEyMTI0MDk2ZiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY0NjkwMTQ1LCJleHAiOjE2NjQ2OTA0NDV9.QSIMxpvNMO94b3MANLSxNS5gg9LToNtv1w3-wQY67Ok
+DELETE http://localhost:4000/user/delete/633e9e87c7337708720813b1
+
 ###
-POST http://localhost:8080/user/login
+POST http://localhost:4000/user/login
 Content-Type: application/json
 
 {
-    "user": "jeremy",
+    "email": "jeremysantoso98@gmail.com",
     "password": "12345678"
 }
 
 ###
-GET http://localhost:8080/user/role
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY5MDM0NywiZXhwIjoxNjY0NjkwNjQ3fQ.x7_BoUOVJzGVUzYfJ7-uaO-8223Jt1hSTDeqtLkvpy4
+GET http://localhost:4000/user/verify
+
+###
+DELETE http://localhost:4000/user/logout
+
+###
+GET http://localhost:4000/auth/login/success

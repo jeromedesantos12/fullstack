@@ -1,32 +1,75 @@
 // IMPORT
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ProtectedUser } from "../../utils/protected/ProtectedUser";
+import { apiLogout, apiVerify } from "../../config/api";
 import swal from "sweetalert";
-import jwtDecode from "jwt-decode";
 
 // COMPONENT
 const Header = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-  let decodedToken = token ? jwtDecode(token) : null;
-
   // USE STATE
   const [student, setStudent] = useState(false);
   const [user, setUser] = useState(false);
+  const [profile, setProfile] = useState(false);
+
+  const [verify, setVerify] = useState(""); // ada atau nggak tokennya?
+  const [info, setInfo] = useState(""); // token ada && role: user (kunci) cuma bedanya tidak diredirect
+  const { success } = verify;
+  const { id, role } = info;
 
   // USE EFFECT
   useEffect(() => {
+    hashSanitize();
+    verifyToken();
     if (window.location.pathname === "/") {
       setStudent(true);
     } else if (window.location.pathname === "/user") {
       setUser(true);
+    } else if (window.location.pathname === `/profile/${id}`) {
+      setProfile(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   // REDIRECT
   const navigate = useNavigate();
+
+  // BERSIHKAN PATH HASH "#_=_" DARI LOGIN FB
+  const hashSanitize = () => {
+    if (window.location.hash && window.location.hash == "#_=_") {
+      window.history.pushState("", document.title, window.location.pathname);
+    }
+  };
+
+  // CEK TOKEN
+  const verifyToken = async () => {
+    try {
+      const { success, error } = await apiVerify();
+      if (success) {
+        console.log(success.message);
+        setVerify({ success: true });
+        setInfo(success.info);
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      console.error(error);
+      setVerify({ error: true });
+    }
+  };
+
+  // LOGOUT
+  const logout = async () => {
+    try {
+      const { success, error } = await apiLogout();
+      if (success) {
+        console.log(success.message);
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // DELETE ALERT
   const logoutAlert = async () => {
@@ -39,7 +82,7 @@ const Header = () => {
         dangerMode: true,
       });
       if (ok) {
-        localStorage.removeItem("token");
+        logout();
         navigate("/login");
         swal("OK! Anda telah logout!", {
           icon: "success",
@@ -80,33 +123,40 @@ const Header = () => {
               onClick={() => {
                 setStudent(true);
                 setUser(false);
+                setProfile(false);
               }}
             >
-              Students
+              <i className="bi bi-book-half me-2" />
             </Link>
 
-            <ProtectedUser
-              token={token}
-              content={
-                <Link
-                  to="/user"
-                  className={
-                    user ? "nav-item nav-link active" : "nav-item nav-link"
-                  }
-                  onClick={() => {
-                    setUser(true);
-                    setStudent(false);
-                  }}
-                >
-                  Users
-                </Link>
-              }
-            />
+            <div className={success && role === "USER" ? "d-none" : "d-block"}>
+              <Link
+                to="/user"
+                className={
+                  user ? "nav-item nav-link active" : "nav-item nav-link"
+                }
+                onClick={() => {
+                  setUser(true);
+                  setStudent(false);
+                  setProfile(false);
+                }}
+              >
+                <i className="bi bi-person-fill me-2" />
+              </Link>
+            </div>
+
             <Link
-              to={token ? `profile/${decodedToken.id}` : null}
-              className="nav-item nav-link"
+              to={success ? `profile/${id}` : null}
+              className={
+                profile ? "nav-item nav-link active" : "nav-item nav-link"
+              }
+              onClick={() => {
+                setProfile(true);
+                setUser(false);
+                setStudent(false);
+              }}
             >
-              Profile
+              <i className="bi bi-gear-fill me-2" />
             </Link>
 
             <div
@@ -115,7 +165,7 @@ const Header = () => {
               }}
               className="nav-item nav-link"
             >
-              Logout
+              <i className="bi bi-power me-2" />
             </div>
           </div>
         </div>

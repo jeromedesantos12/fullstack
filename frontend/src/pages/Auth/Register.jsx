@@ -1,41 +1,35 @@
 // IMPORT
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { apiAdd } from "../../config/api";
-import { validAdd } from "../../utils/validation/validUser";
-import { ProtectedAuth } from "../../utils/protected/ProtectedAuth";
+import { apiRegister } from "../../config/api";
+import { validProfile } from "../../utils/validation/validUser";
+import ProtectedAuth from "../../utils/protected/ProtectedAuth";
 import swal from "sweetalert";
 
 // COMPONENT
 const Register = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
-  const [username, setUsername] = useState("");
+  const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   // TEXT MERAH
-  const [txtusername, setTxtUsername] = useState("");
+  const [txtnama, setTxtNama] = useState("");
   const [txtemail, setTxtEmail] = useState("");
   const [txtpassword, setTxtPassword] = useState("");
   const [txtpasswordConfirmation, setTxtPasswordConfirmation] = useState("");
-
-  // TEXT MERAH (VALIDASI DUPLIKAT BACKEND)
-  const [duplicateusername, setDuplicateUsername] = useState("");
   const [duplicateemail, setDuplicateEmail] = useState("");
 
   // REDIRECT
   const navigate = useNavigate();
 
-  // api <- VALUE
-  const attr = { username, email, password, role: "user" };
+  // API <- "VALUE"
+  const attr = { nama, email, password, passwordConfirmation };
 
   // SET KOSONG
   const kosong = () => {
-    setUsername("");
+    setNama("");
     setEmail("");
     setPassword("");
     setPasswordConfirmation("");
@@ -43,15 +37,9 @@ const Register = () => {
 
   // VALIDASI FRONTEND
   const validation = () => {
-    const value = validAdd(
-      username,
-      email,
-      password,
-      passwordConfirmation,
-      "user"
-    );
+    const value = validProfile(nama, email, password, passwordConfirmation);
     if (Object.keys(value).length > 0) {
-      setTxtUsername(value.username);
+      setTxtNama(value.nama);
       setTxtEmail(value.email);
       setTxtPassword(value.password);
       setTxtPasswordConfirmation(value.passwordConfirmation);
@@ -59,13 +47,13 @@ const Register = () => {
     return value;
   };
 
-  // ADD
-  const addData = async () => {
+  // REGISTER
+  const registerData = async () => {
     const valid = validation();
     try {
-      const { success, error } = await apiAdd("user", attr);
+      const { success, error } = await apiRegister("user", attr);
       if (success) {
-        console.log(success.added_user);
+        console.log(success.registered_user);
         swal("OK!", "Data berhasil disimpan!", "success");
         kosong();
         navigate("/login");
@@ -74,12 +62,7 @@ const Register = () => {
       }
     } catch (error) {
       console.error(error);
-      if (
-        error.addUsername ||
-        error.addEmail ||
-        Object.keys(valid).length > 0
-      ) {
-        setDuplicateUsername(error.addUsername);
+      if (error.addEmail || Object.keys(valid).length > 0) {
         setDuplicateEmail(error.addEmail);
         return false;
       }
@@ -91,7 +74,6 @@ const Register = () => {
   // RENDER
   return (
     <ProtectedAuth
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex align-items-center justify-content-center vh-100">
@@ -106,38 +88,33 @@ const Register = () => {
                   <form
                     onSubmit={(error) => {
                       error.preventDefault();
-                      addData();
+                      registerData();
                     }}
                   >
                     <div className="row mb-3">
                       <div className="col">
                         <div className="mb-3">
-                          <label className="form-label" htmlFor="username">
-                            Username
+                          <label className="form-label" htmlFor="nama">
+                            Nama
                           </label>
                           <input
                             type="text"
-                            placeholder="Masukkan Username"
+                            placeholder="Masukkan Nama"
                             className={
-                              txtusername || duplicateusername
+                              txtnama
                                 ? "form-control is-invalid"
                                 : "form-control"
                             }
-                            id="username"
-                            value={username}
+                            id="nama"
+                            value={nama}
                             onChange={(error) => {
-                              setUsername(error.target.value);
-                              setTxtUsername("");
+                              setNama(error.target.value);
+                              setTxtNama("");
                             }}
                           />
-                          {txtusername && (
+                          {txtnama && (
                             <div className="form-text text-danger">
-                              {txtusername}
-                            </div>
-                          )}
-                          {duplicateusername && (
-                            <div className="form-text text-danger">
-                              {duplicateusername}
+                              {txtnama}
                             </div>
                           )}
                         </div>

@@ -1,37 +1,28 @@
 [{
   "_id": {
-    "$oid": "6337b758c949a3ea2124096f"
+    "$oid": "633fe106b42e3b32f6f53989"
   },
-  "username": "user",
-  "email": "user98@gmail.com",
-  "password": "$2b$10$MyW1h7LXGj47XoMuc9r8OOh9Ix7UVSlc8O6A/5BCuncybAXk3tsuG",
-  "role": "user",
+  "nama": "User",
+  "email": "user@gmail.com",
+  "password": "$2b$10$Lvpcs9Ltztc1S/QLeYxgwezFqcRxcRBV1fU1Z9aJiTGz5lUy3JOiO",
+  "role": "ADMIN",
   "__v": 0
 },{
   "_id": {
-    "$oid": "633e9f258dce552c0c031da3"
+    "$oid": "6347721623565cdea50a5c09"
   },
-  "username": "santosojeremy07",
-  "email": "jeremy@gmail.com",
-  "password": "$2b$10$K6W38dc7KMdul7XsIJi/.OHdE.7SJ61d532hvpysZWpvmK5UXyX9u",
-  "role": "user",
+  "nama": "Sandhika Galih",
+  "email": "wpu@gmail.com",
+  "password": "$2b$10$b56KJxt.tisFNN9xxgBT0eL56OHTxV6KmbO893zuJSr1bYdQJmhj2",
+  "role": "ADMIN",
   "__v": 0
 },{
   "_id": {
-    "$oid": "634536aa12594634ebedbbbf"
+    "$oid": "6347727723565cdea50a5c2d"
   },
-  "username": "santosojeremy0",
-  "email": "santosojeremy07@gmail.com",
-  "password": "$2b$10$TUAgwQaH6VB1Qaqh0Sobr.9wgVLaoh/6wt08vPrzb2U5FTaSkssr2",
-  "role": "user",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "6348ce3772758bf63927ae31"
-  },
-  "username": "jeremy",
+  "nama": "Jeremy Santoso",
   "email": "jeremysantoso98@gmail.com",
-  "password": "$2b$10$6bkIRlYY78LLuR1joSAjseb8HUeWYT8uM71Zu.eX4zf3HZvdKm6YS",
-  "role": "user",
+  "password": "$2b$10$uUxCKMm2mIOVXt2PWbcO3e7Nvshm1bj1G34.VBJBe5IJUFifYgX/u",
+  "role": "USER",
   "__v": 0
 }]

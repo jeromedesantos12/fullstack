@@ -1,6 +1,5 @@
 // IMPORT
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const { useError } = require("../controllers/ErrorController");
 const {
   getStudents,
@@ -17,7 +16,7 @@ const {
 } = require("../utils/validation/validStudent");
 const { verifyAccessToken } = require("../utils/auth/jwt");
 
-// METHOD API
+// API
 router.get("/read", verifyAccessToken, getStudents);
 router.get("/read/:id", verifyAccessToken, getStudentById);
 router.get("/search", verifyAccessToken, validSearch, searchStudent);

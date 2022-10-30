@@ -4,36 +4,44 @@ import { apiVerify } from "../../config/api";
 import React, { useState, useEffect } from "react";
 
 // PROTECT HALAMAN STUDENT
-export const ProtectedStudent = ({ token, content }) => {
+const ProtectedStudent = ({ content }) => {
   // USE STATE
-  const [valid, setValid] = useState("");
+  const [verify, setVerify] = useState("");
 
   // USE EFFECT
   useEffect(() => {
-    tokenValid();
+    verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // CEK ROLE
-  const tokenValid = async () => {
+  // CEK TOKEN
+  const verifyToken = async () => {
     try {
-      const { success, error } = await apiVerify(token);
-      if (success) setValid({ success: success.message });
-      if (error) throw error;
+      const { success, error } = await apiVerify();
+      if (success) {
+        console.log(success.message);
+        setVerify({ success: true });
+      } else {
+        throw error;
+      }
     } catch (error) {
-      setValid({ error: error });
+      console.error(error);
+      setVerify({ error: true });
     }
   };
 
   // PROTECT HALAMAN
-  const { success, error } = valid;
+  const { success, error } = verify;
   if (success) {
     return <div className="d-block">{content}</div>;
   } else if (error) {
     return (
-      <Navigate to="/login" className="d-none">
+      <Navigate to="/login" className=" d-none">
         {content}
       </Navigate>
     );
   }
 };
+
+// EXPORT
+export default ProtectedStudent;

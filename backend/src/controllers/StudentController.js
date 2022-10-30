@@ -9,7 +9,6 @@ exports.getStudents = async (req, res) => {
       return res.status(204).json({
         status: "204 No Content",
         message: "Data masih kosong!",
-        users,
       });
     }
     res.status(200).json({

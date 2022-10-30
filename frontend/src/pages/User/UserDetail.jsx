@@ -2,16 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { apiGetById } from "../../config/api";
-import { ProtectedUser } from "../../utils/protected/ProtectedUser";
+import ProtectedUser from "../../utils/protected/ProtectedUser";
 import swal from "sweetalert";
 
 // COMPONENT
 const UserDetail = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
-  const [username, setUsername] = useState("");
+  const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
 
@@ -30,10 +27,10 @@ const UserDetail = () => {
   // GET BY ID
   const getIdData = async () => {
     try {
-      const { success, error } = await apiGetById(token, "user", id);
+      const { success, error } = await apiGetById("user", id);
       if (success) {
         console.log(success);
-        setUsername(success.user.username);
+        setNama(success.user.nama);
         setEmail(success.user.email);
         setRole(success.user.role);
       } else {
@@ -42,14 +39,13 @@ const UserDetail = () => {
     } catch (error) {
       console.error(error);
       swal("ERROR!", "Data tidak ditemukan!", "error");
-      navigate("/");
+      navigate("/user");
     }
   };
 
   // RENDER
   return (
     <ProtectedUser
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -59,17 +55,17 @@ const UserDetail = () => {
                   <div className="row mb-4">
                     <div className="col">
                       <div className="card-header">
-                        <h5 className="card-title">{username}</h5>
+                        <h5 className="card-title text-center">{nama}</h5>
                       </div>
                       <ul className="list-group list-group-flush">
-                        <li className="list-group-item">
-                          <i className="bi bi-people-fill me-3"></i>
+                        <li
+                          className={
+                            role === "ADMIN"
+                              ? "list-group-item badge bg-secondary text-light p-2"
+                              : "list-group-item badge bg-secondary bg-opacity-25 text-dark p-2"
+                          }
+                        >
                           {role}
-                        </li>
-
-                        <li className="list-group-item">
-                          <i className="bi bi bi-envelope-fill me-3"></i>
-                          {email}
                         </li>
                       </ul>
                     </div>

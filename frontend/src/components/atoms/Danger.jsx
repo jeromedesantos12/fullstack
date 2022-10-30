@@ -1,7 +1,9 @@
+// IMPORT
 import React from "react";
 
-// DATA TIDAK DITEMUKAN
+// COMPONENT
 const Danger = ({ text }) => {
+  // RENDER
   return (
     <div className="alert alert-danger" role="alert">
       <i className="bi bi-exclamation-triangle-fill me-3"></i>
@@ -10,4 +12,5 @@ const Danger = ({ text }) => {
   );
 };
 
+// EXPORT
 export default Danger;

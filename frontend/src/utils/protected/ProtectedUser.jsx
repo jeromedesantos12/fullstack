@@ -2,43 +2,46 @@
 import { Navigate } from "react-router-dom";
 import { apiVerify } from "../../config/api";
 import React, { useState, useEffect } from "react";
-import jwtDecode from "jwt-decode";
 
 // PROTECT HALAMAN USER
-export const ProtectedUser = ({ token, content }) => {
+const ProtectedUser = ({ content }) => {
   // USE STATE
-  const [valid, setValid] = useState("");
-  let decodedToken = token ? jwtDecode(token) : null;
+  const [verify, setVerify] = useState(""); // ada atau nggak tokennya?
+  const [info, setInfo] = useState(""); // token ada && role: user (kunci)
 
   // USE EFFECT
   useEffect(() => {
-    tokenValid();
+    verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // CEK ROLE
-  const tokenValid = async () => {
+  // CEK TOKEN
+  const verifyToken = async () => {
     try {
-      const { success, error } = await apiVerify(token);
-      if (success) setValid({ success: success.message });
-      if (error) throw error;
+      const { success, error } = await apiVerify();
+      if (success) {
+        console.log(success.message);
+        setVerify({ success: true });
+        setInfo(success.info);
+      } else {
+        throw error;
+      }
     } catch (error) {
-      setValid({ error: error });
+      console.error(error);
+      setVerify({ error: true });
     }
   };
 
   // PROTECT HALAMAN
-  const { success, error } = valid;
-  if (window.location.pathname === "/user" && decodedToken.role === "user") {
+  const { success, error } = verify;
+  const { role } = info;
+  if (success && role === "USER") {
     return (
       <Navigate to="/" className="d-none">
         {content}
       </Navigate>
     );
-  } else if (decodedToken.role === "user") {
-    return <div className="d-none">{content}</div>;
-  }
-  if (success) {
+  } else if (success) {
     return <div className="d-block">{content}</div>;
   } else if (error) {
     return (
@@ -48,3 +51,6 @@ export const ProtectedUser = ({ token, content }) => {
     );
   }
 };
+
+// EXPORT
+export default ProtectedUser;

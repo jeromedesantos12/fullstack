@@ -2,14 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { apiGetById } from "../../config/api";
-import { ProtectedStudent } from "../../utils/protected/ProtectedStudent";
+import ProtectedStudent from "../../utils/protected/ProtectedStudent";
 import swal from "sweetalert";
 
 // COMPONENT
 const StudentDetail = () => {
-  // LOCAL STORAGE
-  const token = localStorage.getItem("token");
-
   // USE STATE
   const [nim, setNIM] = useState("");
   const [nama, setNama] = useState("");
@@ -32,7 +29,7 @@ const StudentDetail = () => {
   // GET BY ID
   const getIdData = async () => {
     try {
-      const { success, error } = await apiGetById(token, "student", id);
+      const { success, error } = await apiGetById("student", id);
       if (success) {
         setNIM(success.student.nim);
         setNama(success.student.nama);
@@ -52,7 +49,6 @@ const StudentDetail = () => {
   // RENDER
   return (
     <ProtectedStudent
-      token={token}
       content={
         <div className="container">
           <div className="row d-flex justify-content-center">
@@ -62,8 +58,10 @@ const StudentDetail = () => {
                   <div className="row mb-4">
                     <div className="col">
                       <div className="card-header">
-                        <h5 className="card-title">{nama}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">{nim}</h6>
+                        <h5 className="card-title text-center">{nama}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted text-center">
+                          {nim}
+                        </h6>
                       </div>
                       <ul className="list-group list-group-flush">
                         <li className="list-group-item">
