@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "63267afd51cc60321f1fd9ac"
+  },
+  "nim": "2013081231",
+  "nama": "Volksen",
+  "gender": "Pria",
+  "telp": "08123111123",
+  "jurusan": "Teknik Komputer Jaringan",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63267b3b51cc60321f1fd9bd"
+  },
+  "nim": "2014801232",
+  "nama": "Hong Hau Hau",
+  "gender": "Pria",
+  "telp": "081239182311",
+  "jurusan": "Teknik Komputer Jaringan",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63267b7251cc60321f1fd9c3"
+  },
+  "nim": "2020123212",
+  "nama": "Yama Sora",
+  "gender": "Pria",
+  "telp": "0823111231231",
+  "jurusan": "Teknik Komputer Jaringan",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63267ba451cc60321f1fd9c9"
+  },
+  "nim": "2013801231",
+  "nama": "Umi Shiro",
+  "gender": "Wanita",
+  "telp": "081231231122",
+  "jurusan": "Sistem Informasi",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63267bdb51cc60321f1fd9dd"
+  },
+  "nim": "2001802311",
+  "nama": "Ririn Watanabe",
+  "gender": "Wanita",
+  "telp": "08123123331",
+  "jurusan": "Teknik Informasi",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "63267c0751cc60321f1fd9e3"
+  },
+  "nim": "2008091234",
+  "nama": "Kobo Kanaeru",
+  "gender": "Wanita",
+  "telp": "0812312312",
+  "jurusan": "Teknik Informasi",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6326818951cc60321f1fda13"
+  },
+  "nim": "2013081233",
+  "nama": "Moona Hoshinova",
+  "gender": "Wanita",
+  "telp": "08123123123",
+  "jurusan": "Sistem Informasi",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "633fdad090f3dc6469dc5f09"
+  },
+  "nim": "2017084323",
+  "nama": "Sandhika Galih",
+  "gender": "Pria",
+  "telp": "08232423423",
+  "jurusan": "Teknik Informasi",
+  "__v": 0
+}]

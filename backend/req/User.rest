@@ -1,0 +1,56 @@
+GET http://localhost:8080/user/read/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MjUyNCwiZXhwIjoxNjY0NzcyODI0fQ.yltn1ZPcuY_D-tffLWvcZEgJRl4ze1aMUfIYPcrCsbg
+
+###
+GET http://localhost:8080/user/read/63296e5dcaf0f78b84de8d88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NTk0NywiZXhwIjoxNjY0Njc2MjQ3fQ.t4UqXPMuUsBpxagUIbNPIPP598fWawZEkct7cfgffd4
+###
+GET http://localhost:8080/user/search?input=s
+Authorization: Bearer eyJ---CIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NTk0NywiZXhwIjoxNjY0Njc2MjQ3fQ.t4UqXPMuUsBpxagUIbNPIPP598fWawZEkct7hku9iH4
+###
+POST http://localhost:8080/user/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzA4MiwiZXhwIjoxNjY0NzczMzgyfQ.kJoRdCBrkVE7TptbpyJjT5hPiryLXaE1wQNa7etEDi4
+Content-Type: application/json
+
+{
+    "username": "jeremy",
+    "email": "jeremy",
+    "password": "jeremy",
+    "passwordConfirmation": "jeremy",
+    "role": ""
+}
+###
+PATCH http://localhost:8080/user/update/63296e5dcaf0f78b84de8d88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzA4MiwiZXhwIjoxNjY0NzczMzgyfQ.kJoRdCBrkVE7TptbpyJjT5hPiryLXaE1wQNa7etEDi4
+Content-Type: application/json
+
+{
+    "role": "admin"
+}
+###
+PATCH http://localhost:8080/user/profile/63296e5dcaf0f78b84de8d88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDc3MzE3MSwiZXhwIjoxNjY0NzczNDcxfQ.hhTSdgVJJwxzwHlX045o3J8AN2B8mwqbptU8BT9magU
+Content-Type: application/json
+
+{
+    "username": "jeremy",
+    "email": "jeremy@gmail.com",
+    "password": "jeremysantoso",
+    "passwordConfirmation": "jeremysantoso",
+    "role": "admin"
+}
+###
+DELETE http://localhost:8080/user/delete/633149545e7497329a0a5a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzdiNzU4Yzk0OWEzZWEyMTI0MDk2ZiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY0NjkwMTQ1LCJleHAiOjE2NjQ2OTA0NDV9.QSIMxpvNMO94b3MANLSxNS5gg9LToNtv1w3-wQY67Ok
+###
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+    "user": "jeremy",
+    "password": "12345678"
+}
+
+###
+GET http://localhost:8080/user/role
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY5MDM0NywiZXhwIjoxNjY0NjkwNjQ3fQ.x7_BoUOVJzGVUzYfJ7-uaO-8223Jt1hSTDeqtLkvpy4

@@ -1,0 +1,37 @@
+GET http://localhost:8080/student/read/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNDhjZTM3NzI3NThiZjYzOTI3YWUzMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjY3MTQyNzUwLCJleHAiOjE2NjcxNDMwNTB9.Dtcx6pbkuEMLY8qqkN5vavq3dGAIB-I5SRt-MNREwFU
+###
+GET http://localhost:8080/student/read/63267afd51cc60321f1fd9ac
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NjM4NiwiZXhwIjoxNjY0Njc2Njg2fQ.ZersAP3MejaXBSg_ac4UUSuWnFtX6O-x4QdP2l_0AiY
+###
+GET http://localhost:8080/student/search?input=201
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NjM4NiwiZXhwIjoxNjY0Njc2Njg2fQ.ZersAP3MejaXBSg_ac4UUSuWnFtX6O-x4QdP2l_0AiY
+###
+POST http://localhost:8080/student/add
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDcxNzI5OCwiZXhwIjoxNjY0NzE3NTk4fQ.7bQr0CzeELrCC8Jpud0Q84UxK_RMI5fscv2bCdPfJT8
+Content-Type: application/json
+
+{
+    "nim": "asd",
+    "nama": "123",
+    "gender": "Pria",
+    "telp": "abc",
+    "jurusan": "aaa"
+}
+
+### 
+PATCH http://localhost:8080/student/update/6320ff9644d2834a4695241f
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NjM4NiwiZXhwIjoxNjY0Njc2Njg2fQ.ZersAP3MejaXBSg_ac4UUSuWnFtX6O-x4QdP2l_0AiY
+Content-Type: application/json
+
+{
+    "nim": "2018802312",
+    "nama": "Jeremy Santoso",
+    "gender": "Pria",
+    "telp": "08234567891",
+    "jurusan": "Teknik Komputer Jaringan"
+}
+
+###
+DELETE http://localhost:8080/student/delete/632aa9b5bc2b4ff363a34e71
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjk2ZTVkY2FmMGY3OGI4NGRlOGQ4OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY2NDY3NjM4NiwiZXhwIjoxNjY0Njc2Njg2fQ.ZersAP3MejaXBSg_ac4UUSuWnFtX6O-x4QdP2l_0AiY
